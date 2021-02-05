@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-const Home = () => import('../view/Home/Home.vue')
-const Category = () => import('../view/Category/Category.vue')
-const Cart = () => import('../view/Cart/Cart.vue')
-const Profile = () => import('../view/Profile/Profile.vue')
+const Home = () => import('view/Home/Home.vue')
+const Category = () => import('view/Category/Category.vue')
+const Cart = () => import('view/Cart/Cart.vue')
+const Profile = () => import('view/Profile/Profile.vue')
 
 Vue.use(VueRouter)
 
