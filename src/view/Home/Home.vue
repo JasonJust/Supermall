@@ -3,30 +3,40 @@
     <nav-bar class="nav-home">
       <div slot="nav-center">购物车</div>
     </nav-bar>
+    <swiper-list>
+      <swiper-item v-for="(item,index) in banners" :key="index">
+        <img slot="swiper-img" :src="item.image" style="width: 100%;height:100%" alt=""/>
+      </swiper-item>
+    </swiper-list>
   </div>
 </template>
 
 <script>
-//函数调用->压入函数栈（保存函数调用过程中所有变量）
-//函数调用结束->弹出函数栈（释放函数所有的变量）
-
 import NavBar from 'components/common/navbar/NavBar.vue'
 import {getHomeMultidata} from 'network/home.js'
+import SwiperList from '../../components/common/swiper/SwiperList.vue'
+import SwiperItem from '../../components/common/swiper/SwiperItem.vue'
 
 export default {
   name: 'Home',
   components: {
-    NavBar
+    NavBar,
+    SwiperList,
+    SwiperItem
   },
   data () {
     return {
-      banner: []
+      banners: [],
+      recommends: []
     }
   },
   created () {
-    getHomeMultidata(res=>{
-      this.banner = res.data.banner
-      console.log(this.banner);
+    getHomeMultidata().then(res=>{
+      this.banners = res.data.banner.list
+      this.recommends = res.data.recommend.list
+      // this.$nextTick(()=>{
+      //   new Swiper('.swiper-container',{})
+      // })
     })
   }
 }
