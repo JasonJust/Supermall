@@ -1,6 +1,8 @@
 <template>
   <div class="swiper-slide">
-    <slot name="swiper-img"></slot>
+    <div>
+      <slot></slot>
+    </div>
   </div>
 </template>
 
