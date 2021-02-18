@@ -118,7 +118,7 @@ import FeatureView from "./childComps/FeatureView"
 import NavBar from 'components/common/navbar/NavBar.vue'
 import TabControl from "components/common/tabcontrol/TabControl";
 
-import {getHomeMultidata} from 'network/home.js'
+import {getHomeMultidata, getHomeGoods} from 'network/home.js'
 
 export default {
   name: 'Home',
@@ -130,20 +130,38 @@ export default {
     TabControl
   },
   data () {
-
     return {
       banners: [],
-      recommends: []
+      recommends: [],
+      goods: {
+        'pop': {page: 0,list: []},
+        'news': {page: 0,list: []},
+        'sell': {page: 0,list: []},
+      }
     }
   },
   created () {
-    getHomeMultidata().then(res=>{
-      this.banners = res.data.banner.list
-      this.recommends = res.data.recommend.list
-      // this.$nextTick(()=>{
-      //   new Swiper('.swiper-container',{})
-      // })
-    })
+    this.getHomeMultidata()
+    this.getHomeGoods('pop')
+  },
+  methods: {
+    getHomeMultidata() {
+      getHomeMultidata().then(res=>{
+        this.banners = res.data.banner.list
+        this.recommends = res.data.recommend.list
+        // this.$nextTick(()=>{
+        //   new Swiper('.swiper-container',{})
+        // })
+      })
+    },
+    getHomeGoods(type) {
+      const page = this.goods[type].page + 1
+      getHomeGoods(type,page).then(res =>{
+        // this.goods[type].list.push(...res.data.list)
+        // this.goods[type].page += 1
+        console.log(res);
+      })
+    }
   }
 }
 </script>
