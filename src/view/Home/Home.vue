@@ -1,11 +1,17 @@
 <template>
   <div id="home">
     <nav-bar class="nav-home"><div slot="nav-center">购物车</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view></feature-view>
-    <tab-control :titles="['流行','新款','精选']" class="tab-control"></tab-control>
-    <ul>
+    
+    <better-scroll>
+        <home-swiper :banners="banners"></home-swiper>
+        <recommend-view :recommends="recommends"></recommend-view>
+        <feature-view></feature-view>
+        <tab-control :titles="['流行','新款','精选']"
+                      class="tab-control"
+                      @tabClick="tabClick" ></tab-control>
+        <goods-list :goods="showData"/>
+    </better-scroll>
+    <!-- <ul>
       <li>列表1</li>
       <li>列表2</li>
       <li>列表3</li>
@@ -106,7 +112,7 @@
       <li>列表98</li>
       <li>列表99</li>
       <li>列表100</li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -116,9 +122,11 @@ import RecommendView from './childComps/RecommendView.vue'
 import FeatureView from "./childComps/FeatureView"
 
 import NavBar from 'components/common/navbar/NavBar.vue'
-import TabControl from "components/common/tabcontrol/TabControl";
+import TabControl from "components/content/tabcontrol/TabControl"
+import GoodsList from "components/content/goods/GoodsList.vue"
 
 import {getHomeMultidata, getHomeGoods} from 'network/home.js'
+import BetterScroll from '../../components/common/scroll/BetterScrolls.vue'
 
 export default {
   name: 'Home',
@@ -127,7 +135,9 @@ export default {
     RecommendView,
     FeatureView,
     NavBar,
-    TabControl
+    TabControl,
+    GoodsList,
+    BetterScroll
   },
   data () {
     return {
@@ -135,16 +145,43 @@ export default {
       recommends: [],
       goods: {
         'pop': {page: 0,list: []},
-        'news': {page: 0,list: []},
+        'new': {page: 0,list: []},
         'sell': {page: 0,list: []},
-      }
+      },
+      curryIndex:'pop'
     }
   },
   created () {
     this.getHomeMultidata()
     this.getHomeGoods('pop')
+    this.getHomeGoods('new')
+    this.getHomeGoods('sell')
+  },
+  computed: {
+    showData () {
+      return this.goods[this.curryIndex].list;
+    }
   },
   methods: {
+    /**
+     * 事件监听相关方法
+     */
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.curryIndex = 'pop';
+          break;
+        case 1:
+          this.curryIndex = 'new';
+          break;
+        case 2:
+          this.curryIndex = 'sell';
+          break;
+      }
+    },
+    /**
+     * 网络请求相关方法
+     */
     getHomeMultidata() {
       getHomeMultidata().then(res=>{
         this.banners = res.data.banner.list
@@ -157,9 +194,9 @@ export default {
     getHomeGoods(type) {
       const page = this.goods[type].page + 1
       getHomeGoods(type,page).then(res =>{
-        // this.goods[type].list.push(...res.data.list)
-        // this.goods[type].page += 1
-        console.log(res);
+        this.goods[type].list.push(...res.data.list)
+        this.goods[type].page += 1
+        // console.log(res);
       })
     }
   }

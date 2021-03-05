@@ -1,5 +1,9 @@
 @import "./normalize.css";
 
+*{
+  padding: 0;
+  margin: 0;
+}
 /*:root -> 获取根元素html*/
 :root {
   --color-text: #666;
@@ -25,7 +29,7 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   /* rem vw/vh */
-  width: 100vw;
+  width: 100%;
 }
 
 a {

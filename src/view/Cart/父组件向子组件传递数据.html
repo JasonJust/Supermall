@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="../../assets/js/vue.js"></script>
+</head>
+<body>
+  <!-- 父组件 -->
+  <div id="app">
+    <cpn :exmovies="movies" :exmessage="message"></cpn>
+  </div>
+  <!-- 子组件 -->
+<template id="cpn">
+  <div>
+    <ul>
+      <li v-for="(item,index) in exmovies" :key="index">{{item}}</li>
+    </ul>
+    <span>{{exmessage}}</span>
+  </div>
+</template>
+
+</body>
+<script>
+  // 父传子:props
+  const cpn = {
+    template: '#cpn',
+    props: {
+      //提供默认值，以及必传值
+      exmovies: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+      exmessage: {
+        type: String,
+        default: 'a o',
+        required: true
+      }
+    }
+  }
+
+  const app = new Vue({
+    el:'#app',
+    data: {
+      message: 'hellow',
+      movies: ['唐人街探案3','你好，李焕英','刺杀小说家','新神榜：哪吒重生','侍神令']
+    },
+    components: {
+      cpn
+    }
+  })
+</script>
+</html>
